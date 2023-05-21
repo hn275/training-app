@@ -1,15 +1,11 @@
 import { Box, FormControl, TextField, Link, Alert, Slide } from "@mui/material";
-import {
-  Person,
-  Visibility,
-  VisibilityOff,
-  Login as LoginIcon,
-} from "@mui/icons-material";
+import { Person, Login as LoginIcon } from "@mui/icons-material";
 import Main from "layout/Main";
 import { ChangeEvent, useEffect, useState } from "react";
 import { AuthCard } from "./components/Card";
 import { LoadingButton } from "@mui/lab";
 import { ROUTES } from "mods/Nav";
+import { PasswordInput } from "./components/PasswordInput";
 
 export default function Login() {
   const {
@@ -17,8 +13,6 @@ export default function Login() {
     onUsername,
     password,
     onPassword,
-    show,
-    onShowToggle,
     loading,
     error,
     handleSubmit,
@@ -45,21 +39,11 @@ export default function Login() {
               />
             </Box>
 
-            <Box
-              display="flex"
-              justifyItems="center"
-              alignItems="center"
-              gap={2}
-            >
-              <ShowPassword show={show} onClick={onShowToggle} />
-              <TextField
-                label="password"
-                variant="standard"
-                value={password}
-                onChange={onPassword}
-                type={show ? "text" : "password"}
-              />
-            </Box>
+            <PasswordInput
+              label="password"
+              value={password}
+              onChange={onPassword}
+            />
 
             <LoadingButton
               variant="contained"
@@ -92,31 +76,6 @@ export default function Login() {
         </Box>
       </Slide>
     </Main>
-  );
-}
-
-interface ShowPasswordProps {
-  show: boolean;
-  onClick: () => void;
-}
-
-function ShowPassword({ show, onClick }: ShowPasswordProps) {
-  return show ? (
-    <VisibilityOff
-      role="button"
-      onClick={onClick}
-      sx={{ marginTop: 2 }}
-      cursor="pointer"
-      color="action"
-    />
-  ) : (
-    <Visibility
-      role="button"
-      onClick={onClick}
-      sx={{ marginTop: 2 }}
-      cursor="pointer"
-      color="action"
-    />
   );
 }
 
