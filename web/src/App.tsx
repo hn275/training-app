@@ -11,7 +11,7 @@ import { ReactNode } from "react";
 
 export default function App() {
   const { pathname } = window.location;
-  const { user } = useAuth();
+  const atAuth = pathname === ROUTES.login || pathname === ROUTES.register;
 
   return (
     <>
@@ -55,7 +55,7 @@ export default function App() {
           <Route path={ROUTES.register} element={<Register />} />
         </Route>
       </Routes>
-      {user && <Nav />}
+      {!atAuth && <Nav />}
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { Box, FormControl, TextField, Link, Alert, Slide } from "@mui/material";
-import { Person, Login as LoginIcon } from "@mui/icons-material";
+import { Login as LoginIcon, Email } from "@mui/icons-material";
 import Main from "layout/Main";
 import { ChangeEvent, useEffect, useState } from "react";
 import { AuthCard } from "./components/Card";
@@ -23,21 +23,15 @@ export default function Login() {
       <AuthCard title="do the thing.">
         <form onSubmit={handleSubmit}>
           <FormControl sx={{ display: "flex", flexFlow: "column", gap: 2 }}>
-            <Box
-              display="flex"
-              justifyItems="center"
-              alignItems="center"
-              gap={2}
-            >
-              <Person sx={{ marginTop: 2 }} color="action" />
-              <TextField
-                label="username"
-                variant="standard"
-                value={username}
-                onChange={onUsername}
-                type="text"
-              />
-            </Box>
+            <TextField
+              label="email"
+              value={username}
+              onChange={onUsername}
+              type="text"
+              InputProps={{
+                endAdornment: <Email color="action" />,
+              }}
+            />
 
             <PasswordInput
               label="password"
@@ -48,8 +42,6 @@ export default function Login() {
             <LoadingButton
               variant="contained"
               sx={{
-                boxShadow: "none",
-                marginTop: 2,
                 marginX: "auto",
                 width: "max-content",
               }}
