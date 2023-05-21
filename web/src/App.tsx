@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Home from "pages/home/Home.view";
 import Workout from "pages/workout/Workout.view";
 import Progress from "pages/progress/Progress.view";
@@ -10,7 +10,7 @@ import { useAuth } from "mods/context/auth";
 import { ReactNode } from "react";
 
 export default function App() {
-  const { pathname } = window.location;
+  const { pathname } = useLocation();
   const atAuth = pathname === ROUTES.login || pathname === ROUTES.register;
 
   return (
