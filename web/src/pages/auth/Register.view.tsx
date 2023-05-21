@@ -12,6 +12,7 @@ import {
   signOut,
 } from "firebase-sdk/firebase";
 import { useNavigate } from "react-router-dom";
+import Bg from "./background.webp";
 
 export default function Register() {
   const {
@@ -28,6 +29,12 @@ export default function Register() {
 
   return (
     <>
+      <Box display="absolute" top={0} bottom={0} left={0} right={0}>
+        <img
+          src={Bg}
+          style={{ height: "100vh", width: "100%", objectFit: "cover" }}
+        />
+      </Box>
       <Main>
         <AuthCard title="register">
           <Box

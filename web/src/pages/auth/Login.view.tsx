@@ -11,6 +11,7 @@ import {
   signInWithEmailAndPassword as signin,
 } from "firebase-sdk/firebase";
 import { useNavigate } from "react-router-dom";
+import Bg from "./background.webp";
 
 export default function Login() {
   const {
@@ -24,55 +25,68 @@ export default function Login() {
   } = useLogin();
 
   return (
-    <Main>
-      <AuthCard title="do the thing.">
-        <form onSubmit={handleSubmit}>
-          <FormControl sx={{ display: "flex", flexFlow: "column", gap: 2 }}>
-            <TextField
-              label="email"
-              value={username}
-              onChange={onUsername}
-              type="text"
-              InputProps={{
-                endAdornment: <Email color="action" />,
-              }}
-            />
+    <>
+      <Box display="absolute" top={0} bottom={0} left={0} right={0}>
+        <img
+          src={Bg}
+          style={{ height: "100vh", width: "100%", objectFit: "cover" }}
+        />
+      </Box>
+      <Main>
+        <AuthCard title="do the thing.">
+          <form onSubmit={handleSubmit}>
+            <FormControl sx={{ display: "flex", flexFlow: "column", gap: 2 }}>
+              <TextField
+                label="email"
+                value={username}
+                onChange={onUsername}
+                type="text"
+                InputProps={{
+                  endAdornment: <Email color="action" />,
+                }}
+              />
 
-            <PasswordInput
-              label="password"
-              value={password}
-              onChange={onPassword}
-            />
+              <PasswordInput
+                label="password"
+                value={password}
+                onChange={onPassword}
+              />
 
-            <LoadingButton
-              variant="contained"
-              sx={{
-                marginX: "auto",
-                width: "max-content",
-              }}
-              endIcon={<LoginIcon />}
-              loading={loading}
-              loadingPosition="end"
-              type="submit"
-            >
-              Sign In
-            </LoadingButton>
-          </FormControl>
-        </form>
+              <LoadingButton
+                variant="contained"
+                sx={{
+                  marginX: "auto",
+                  width: "max-content",
+                }}
+                endIcon={<LoginIcon />}
+                loading={loading}
+                loadingPosition="end"
+                type="submit"
+              >
+                Sign In
+              </LoadingButton>
+            </FormControl>
+          </form>
 
-        <Box width="100%" display="flex" justifyContent="center" marginTop={1}>
-          <Link underline="hover" href={ROUTES.register} fontSize="0.9em">
-            Register
-          </Link>
-        </Box>
-      </AuthCard>
+          <Box
+            width="100%"
+            display="flex"
+            justifyContent="center"
+            marginTop={1}
+          >
+            <Link underline="hover" href={ROUTES.register} fontSize="0.9em">
+              Register
+            </Link>
+          </Box>
+        </AuthCard>
 
-      <Slide in={error !== ""} unmountOnExit>
-        <Box paddingTop={2}>
-          <Alert severity="error">{error}</Alert>
-        </Box>
-      </Slide>
-    </Main>
+        <Slide in={error !== ""} unmountOnExit>
+          <Box paddingTop={2}>
+            <Alert severity="error">{error}</Alert>
+          </Box>
+        </Slide>
+      </Main>
+    </>
   );
 }
 

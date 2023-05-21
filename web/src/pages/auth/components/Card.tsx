@@ -1,5 +1,6 @@
 import { CardContent, Card, Typography } from "@mui/material";
 import { ReactNode } from "react";
+import "./style.css";
 
 interface CardProps {
   children: ReactNode;
@@ -9,6 +10,7 @@ interface CardProps {
 export function AuthCard({ children, title }: CardProps) {
   return (
     <Card
+      id="card"
       sx={{
         position: "absolute",
         top: "50%",
