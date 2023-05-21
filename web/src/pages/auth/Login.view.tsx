@@ -4,12 +4,9 @@ import Main from "layout/Main";
 import { ChangeEvent, useEffect, useState } from "react";
 import { AuthCard } from "./components/Card";
 import { LoadingButton } from "@mui/lab";
-import { ROUTES } from "mods/Nav";
+import { ROUTES } from "components/Nav/Nav";
 import { PasswordInput } from "./components/PasswordInput";
-import {
-  firebaseAuth,
-  signInWithEmailAndPassword as signin,
-} from "firebase-sdk/firebase";
+import { firebaseAuth, auth } from "firebase-sdk/firebase";
 import { useNavigate } from "react-router-dom";
 import Bg from "./background.webp";
 
@@ -116,7 +113,7 @@ function useLogin() {
     e.preventDefault();
     setLoading(() => true);
     try {
-      await signin(firebaseAuth, username, password);
+      await firebaseAuth.signInWithEmailAndPassword(auth, username, password);
       nav(ROUTES.home);
     } catch (e: any) {
       switch (e.code) {
@@ -150,13 +147,4 @@ function useLogin() {
     error,
     handleSubmit,
   };
-}
-
-function mockFetch(username: string, password: string, willErr = false) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (willErr) return reject("Some error");
-      resolve({ username, password });
-    }, 1000);
-  });
 }

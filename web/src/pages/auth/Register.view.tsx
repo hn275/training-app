@@ -4,13 +4,9 @@ import { AuthCard } from "./components/Card";
 import { Email } from "@mui/icons-material";
 import { PasswordInput } from "./components/PasswordInput";
 import { LoadingButton } from "@mui/lab";
-import { ROUTES } from "mods/Nav";
+import { ROUTES } from "components/Nav/Nav";
 import { ChangeEvent, useEffect, useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  firebaseAuth,
-  signOut,
-} from "firebase-sdk/firebase";
+import { auth, firebaseAuth } from "firebase-sdk/firebase";
 import { useNavigate } from "react-router-dom";
 import Bg from "./background.webp";
 
@@ -133,8 +129,12 @@ function useRegister() {
 
     setLoading(() => true);
     try {
-      await createUserWithEmailAndPassword(firebaseAuth, username, password);
-      await signOut(firebaseAuth);
+      await firebaseAuth.createUserWithEmailAndPassword(
+        auth,
+        username,
+        password
+      );
+      await firebaseAuth.signOut(auth);
       nav(ROUTES.login);
     } catch (e) {
       switch ((e as any).code as string) {
