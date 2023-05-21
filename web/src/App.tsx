@@ -5,7 +5,7 @@ import Progress from "pages/progress/Progress.view";
 import Account from "pages/account/Account.view";
 import Login from "pages/auth/Login.view";
 import Register from "pages/auth/Register.view";
-import { Nav, ROUTES } from "mods/Nav";
+import { Nav, ROUTES } from "components/Nav/Nav";
 import { useAuth } from "mods/context/auth";
 import { ReactNode } from "react";
 
