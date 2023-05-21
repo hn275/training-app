@@ -13,6 +13,8 @@ export enum ROUTES {
   workout = "/workout",
   progress = "/progress",
   account = "/account",
+  login = "/auth/login",
+  register = "/auth/register",
 }
 
 export function Nav() {

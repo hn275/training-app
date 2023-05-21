@@ -9,6 +9,7 @@ import Main from "layout/Main";
 import { ChangeEvent, useEffect, useState } from "react";
 import { AuthCard } from "./components/Card";
 import { LoadingButton } from "@mui/lab";
+import { ROUTES } from "mods/Nav";
 
 export default function Login() {
   const {
@@ -79,7 +80,7 @@ export default function Login() {
         </form>
 
         <Box width="100%" display="flex" justifyContent="center" marginTop={1}>
-          <Link underline="hover" href="/register" fontSize="0.9em">
+          <Link underline="hover" href={ROUTES.register} fontSize="0.9em">
             Register
           </Link>
         </Box>
