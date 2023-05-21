@@ -6,6 +6,11 @@ import { AuthCard } from "./components/Card";
 import { LoadingButton } from "@mui/lab";
 import { ROUTES } from "mods/Nav";
 import { PasswordInput } from "./components/PasswordInput";
+import {
+  firebaseAuth,
+  signInWithEmailAndPassword as signin,
+} from "firebase-sdk/firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const {
@@ -92,14 +97,29 @@ function useLogin() {
     return () => clearTimeout(id);
   }, [error]);
 
+  const nav = useNavigate();
   async function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(() => true);
     try {
-      const data = await mockFetch(username, password);
-      console.log(data);
-    } catch (e) {
-      setError(() => "Server isn't responding");
+      await signin(firebaseAuth, username, password);
+      nav(ROUTES.home);
+    } catch (e: any) {
+      switch (e.code) {
+        case "auth/invalid-email":
+          setError(() => "Invalid email.");
+          return;
+        case "auth/user-not-found":
+          setError(() => "User not found.");
+          return;
+        case "auth/wrong-password":
+          setError(() => "Authentication failed.");
+          return;
+        default:
+          console.log(e.code);
+          setError(() => "Server isn't responding");
+          return;
+      }
     } finally {
       setLoading(() => false);
     }
