@@ -9,19 +9,32 @@ import {
   Typography,
 } from "@mui/material";
 import { FloatButton } from "components/FloatButton/FloatButton";
-import { db, firestore } from "firebase-sdk/firebase";
+import {
+  Exercise,
+  FirestoreCollections,
+  db,
+  firestore,
+} from "firebase-sdk/firestore";
 import Main from "layout/Main";
 import { useAuth } from "mods/context/auth";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
-export default function Home() {
+export default function Workout() {
   const [open, setOpen] = useState<boolean>(false);
+  const { data } = useSubdata();
 
   return (
     <>
       <Main>
         <Typography>Hello world</Typography>
       </Main>
+
+      <ul>
+        {data.map(({ title, id }) => {
+          return <li key={id!}>{title}</li>;
+        })}
+      </ul>
+
       <FloatButton onClick={() => setOpen(() => true)}>
         <Add />
       </FloatButton>
@@ -31,15 +44,42 @@ export default function Home() {
   );
 }
 
+function useSubdata() {
+  const [data, setData] = useState<Exercise[]>([]);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const col = firestore.collection(db, FirestoreCollections.exercises);
+    const where = firestore.where("userID", "==", user.uid);
+    const q = firestore.query(col, where);
+
+    const unsubscribe = firestore.onSnapshot(q, (docs) => {
+      const buf: Exercise[] = [];
+      docs.forEach((doc) => {
+        const { desc, title } = doc.data();
+        buf.push({ id: doc.id, desc, title, userID: user.uid });
+      });
+
+      setData(() => buf);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => console.log(data), [data]);
+
+  return { data };
+}
+
 interface NewWorkoutDrawerProps extends DrawerProps {}
 function NewWorkoutDrawer(props: NewWorkoutDrawerProps) {
-  const { ...rest } = props;
+  const { onClose, ...rest } = props;
 
   const { title, onTitle, desc, onDesc, handleSubmit, loading, error } =
-    useNewExercise();
+    useNewExercise(onClose as () => void);
 
   return (
-    <Drawer {...rest} anchor="right">
+    <Drawer {...rest} anchor="right" onClose={onClose}>
       <Box component="section" padding={5} width="100vw" height="100vh">
         <Typography
           component="h1"
@@ -98,7 +138,7 @@ function NewWorkoutDrawer(props: NewWorkoutDrawerProps) {
   );
 }
 
-function useNewExercise() {
+function useNewExercise(onClose: () => void) {
   const [title, setTitle] = useState<string>("");
   const onTitle = (e: OnHTMLInput) => setTitle(() => e.target.value);
 
@@ -108,14 +148,15 @@ function useNewExercise() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const { user } = useAuth();
+
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(() => true);
     try {
-      const doc = firestore.doc(db, user.uid, title);
-      const data = { desc };
-      const response = await firestore.setDoc(doc, data);
-      console.log(response);
+      const col = firestore.collection(db, FirestoreCollections.exercises);
+      const data: Exercise = { userID: user.uid, title, desc, data: [] };
+      await firestore.addDoc(col, data);
+      onClose();
     } catch (e) {
       console.log(e);
       setError(() => "Server isn't responding.");

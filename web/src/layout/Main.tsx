@@ -7,7 +7,7 @@ interface Props {
 
 export default function Main({ children }: Props) {
   return (
-    <Box bgcolor={colors.blueGrey[50]} minHeight="100vh">
+    <Box bgcolor={colors.blueGrey[50]}>
       <Container component="main">{children}</Container>
     </Box>
   );

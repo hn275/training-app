@@ -28,7 +28,14 @@ export default function Register() {
       <Box display="absolute" top={0} bottom={0} left={0} right={0}>
         <img
           src={Bg}
-          style={{ height: "100vh", width: "100%", objectFit: "cover" }}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            height: "100vh",
+            width: "100%",
+            objectFit: "cover",
+          }}
         />
       </Box>
       <Main>

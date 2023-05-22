@@ -8,6 +8,7 @@ import Register from "pages/auth/Register.view";
 import { Nav, ROUTES } from "components/Nav/Nav";
 import { useAuth } from "mods/context/auth";
 import { ReactNode } from "react";
+import "./global.css";
 
 export default function App() {
   const { pathname } = useLocation();

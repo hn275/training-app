@@ -26,7 +26,14 @@ export default function Login() {
       <Box display="absolute" top={0} bottom={0} left={0} right={0}>
         <img
           src={Bg}
-          style={{ height: "100vh", width: "100%", objectFit: "cover" }}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            height: "100vh",
+            width: "100%",
+            objectFit: "cover",
+          }}
         />
       </Box>
       <Main>
@@ -113,6 +120,7 @@ function useLogin() {
     e.preventDefault();
     setLoading(() => true);
     try {
+      await auth.setPersistence(firebaseAuth.browserSessionPersistence);
       await firebaseAuth.signInWithEmailAndPassword(auth, username, password);
       nav(ROUTES.home);
     } catch (e: any) {
