@@ -6,7 +6,7 @@ import { PasswordInput } from "./components/PasswordInput";
 import { LoadingButton } from "@mui/lab";
 import { ROUTES } from "components/Nav/Nav";
 import { ChangeEvent, useEffect, useState } from "react";
-import { auth, firebaseAuth } from "firebase-sdk/firebase";
+import { auth, firebaseAuth } from "firebase-sdk/auth";
 import { useNavigate } from "react-router-dom";
 import Bg from "./background.webp";
 

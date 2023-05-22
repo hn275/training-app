@@ -5,7 +5,7 @@ import {
   useEffect,
   useContext,
 } from "react";
-import { auth, firebaseAuth } from "firebase-sdk/firebase";
+import { auth, firebaseAuth } from "firebase-sdk/auth";
 
 export interface AuthContextType {
   user: firebaseAuth.User;
