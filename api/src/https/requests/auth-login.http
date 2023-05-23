@@ -1,0 +1,6 @@
+POST https://workout-96f26-default-rtdb.firebaseio.com/test.json
+Content-Type: application/json
+
+{
+    "foo":"bar"
+}

@@ -1,6 +1,7 @@
 use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 
 mod features;
+mod firebase;
 mod https;
 use features::auth;
 
