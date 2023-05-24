@@ -17,7 +17,7 @@ pub async fn controller(mut cred: web::Json<Credentials>) -> Result<String, ApiE
     let c = cred.clone();
 
     let mut fb = Firebase::new();
-    let result = fb.collection("users").set(&c).await.unwrap();
+    let result = fb.at("users").set(&c).await?;
 
     Ok(result.name)
 }
