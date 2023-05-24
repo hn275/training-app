@@ -1,6 +1,8 @@
 use reqwest;
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use reqwest::{Error, Response};
+use serde::{Deserialize, Serialize};
 use std::env;
+use std::future::Future;
 
 pub struct Firebase {
     uri: String,
@@ -49,5 +51,20 @@ impl Firebase {
     fn build_path(&self) -> String {
         let paths = self.at.join("/");
         return self.uri.to_owned() + paths.as_ref() + ".json";
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Auth {
+    email: String,
+    password: String,
+}
+
+impl Auth {
+    async fn authenticate(&self) -> impl Future<Output = Result<Response, Error>> {
+        let auth_base =String::from("https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=[API_KEY]");
+        let key = env::var("AUTH_API_KEY").unwrap();
+        let url = auth_base + key.as_ref();
+        return reqwest::Client::new().post(url).json(self).send();
     }
 }
