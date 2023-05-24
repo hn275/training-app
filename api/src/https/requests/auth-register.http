@@ -1,7 +1,1 @@
-POST http://127.0.0.1:8080/auth/register
-Content-Type: application/json
-
-{
-    "username": "foo",
-    "password": "bar"
-}
+GET https://workout-96f26-default-rtdb.firebaseio.com/users/foo.json

@@ -1,7 +1,5 @@
-use crate::https::error::ApiError;
-use actix_web::http::StatusCode;
 use reqwest;
-use serde::{Deserialize, Deserialize, Serialize};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::env;
 
 pub struct Firebase {
@@ -25,58 +23,31 @@ impl Firebase {
         return self;
     }
 
-    pub async fn get<T>(&self) -> Result<(), ApiError>
-    where
-        T: Sized + Deserialize,
-    {
-        let response = reqwest::Client::new()
-            .get(self.build_path())
-            .send()
-            .await
-            .map_err(|err| ApiError {
-                code: StatusCode::INTERNAL_SERVER_ERROR,
-                err: err.to_string(),
-            })?
-            .json::<T>()
-            .await
-            .map_err(|err| ApiError {
-                err: err.to_string(),
-                code: StatusCode::INTERNAL_SERVER_ERROR,
-            })?;
-
-        Ok(())
+    pub async fn get(&self) -> Result<reqwest::Response, reqwest::Error> {
+        return reqwest::Client::new().get(self.build_path()).send().await;
     }
 
-    pub async fn set<T>(&self, data: &T) -> Result<FirebaseResult, ApiError>
+    pub async fn set<T>(&self, data: &T) -> Result<String, reqwest::Error>
     where
         T: Sized + Serialize,
     {
         let paths = self.build_path();
-        let collection = self.uri.to_owned() + paths.as_ref() + ".json";
-        println!("{}", collection);
+        println!("{}", paths);
 
-        let response = reqwest::Client::new()
-            .post(collection)
+        let r = reqwest::Client::new()
+            .post(paths)
             .header("Content-Type", "application/json")
             .json::<T>(data)
             .send()
-            .await
-            .map_err(|err| ApiError {
-                err: err.to_string(),
-                code: StatusCode::INTERNAL_SERVER_ERROR,
-            })?
+            .await?
             .json::<FirebaseResult>()
-            .await
-            .map_err(|err| ApiError {
-                err: err.to_string(),
-                code: StatusCode::INTERNAL_SERVER_ERROR,
-            })?;
+            .await?;
 
-        return Ok(response);
+        return Ok(r.name);
     }
 
     fn build_path(&self) -> String {
-        let paths = self.build_path();
-        self.uri.to_owned() + paths.as_ref() + ".json"
+        let paths = self.at.join("/");
+        return self.uri.to_owned() + paths.as_ref() + ".json";
     }
 }

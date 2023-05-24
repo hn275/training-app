@@ -9,11 +9,8 @@ pub struct ApiError {
 }
 
 impl ApiError {
-    pub fn new(code: http::StatusCode, message: &str) -> ApiError {
-        ApiError {
-            code,
-            err: message.to_owned(),
-        }
+    pub fn new(code: http::StatusCode, message: String) -> ApiError {
+        ApiError { code, err: message }
     }
 }
 
